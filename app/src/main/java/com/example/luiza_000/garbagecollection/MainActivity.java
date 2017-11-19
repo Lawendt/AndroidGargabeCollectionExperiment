@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                finishAndRemoveTask();
             }
         });
 
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                finishAndRemoveTask();
             }
         });
         threadAccess[1] = new Thread(new Runnable() {
@@ -85,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                finishAndRemoveTask();
             }
         });
 
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                finishAndRemoveTask();
             }
         });
 
@@ -146,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
                 threadAccess[0].start();
                 threadAccess[1].start();
                 threadStore.start();
+            }
+        });
+
+
+        Button bKill = findViewById(R.id.btn_kill);
+        bKill.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                finishAndRemoveTask();
             }
         });
 
