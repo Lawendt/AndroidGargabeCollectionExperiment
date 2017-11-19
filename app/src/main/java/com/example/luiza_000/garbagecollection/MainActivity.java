@@ -10,11 +10,13 @@ public class MainActivity extends AppCompatActivity {
 
     private byte[] bytes;
     private byte[][] bytesArray;
-    private int size = 100;
+    private int size = 1000;
+    private int sharedCurrent = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedCurrent = 0;
 
         final Thread threadForget = new Thread(new Runnable() {
             @Override
@@ -43,23 +45,67 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final Thread[] threadAccess = new Thread[2];
+        threadAccess[0] = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while(sharedCurrent < size) {
+
+                    if(sharedCurrent > 1)
+                    {
+                        for(int i = 0; i < sharedCurrent-1; i++)
+                        {
+                            for(int j = 0; j < 1024*1024; j++)
+                            {
+                                bytesArray[i][j]++;
+                            }
+                        }
+                    }
+                }
+
+                finishAndRemoveTask();
+            }
+        });
+        threadAccess[1] = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while(sharedCurrent < size) {
+
+                    if(sharedCurrent > 1)
+                    {
+                        for(int i = sharedCurrent-2; i >= 0; i--)
+                        {
+                            for(int j = 0; j < 1024*1024; j++)
+                            {
+                                bytesArray[i][j]++;
+                            }
+                        }
+                    }
+                }
+
+                finishAndRemoveTask();
+            }
+        });
+
 
         final Thread threadStore = new Thread(new Runnable() {
             @Override
             public void run() {
-                int current = 0;
+
                 bytesArray = new byte[size][];
 
 
-                while(current < size) {
+                while(sharedCurrent < size) {
                     try {
                         Thread.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    bytesArray[current] = new byte[1024*1024];
-                    current++;
+                    bytesArray[sharedCurrent] = new byte[1024*1024];
+                    sharedCurrent++;
                 }
 
                 try {
@@ -77,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                threadStore.start();
+                threadForget.start();
             }
         });
 
@@ -92,7 +138,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        Button bAccess = findViewById(R.id.btn_access);
+        bAccess.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                threadAccess[0].start();
+                threadAccess[1].start();
+                threadStore.start();
+            }
+        });
 
 
 
