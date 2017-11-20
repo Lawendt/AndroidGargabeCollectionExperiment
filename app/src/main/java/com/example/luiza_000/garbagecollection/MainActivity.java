@@ -1,16 +1,18 @@
 package com.example.luiza_000.garbagecollection;
 
-import android.app.Application;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     private byte[] bytes;
     private byte[][] bytesArray;
-    private int size = 1000;
+    private int times = 100;
+    private int nBytes = 1048576;
     private int sharedCurrent = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,22 +25,17 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 int current = 0;
 
-                while(current < size) {
+                while(current < times) {
                     try {
                         Thread.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    bytes = new byte[1024 * 1024];
+                    bytes = new byte[nBytes];
                     bytes = null;
                     current++;
-                }
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.i("GCTest", "Allocted " + nBytes + " bytes");
                 }
 
             }
@@ -49,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                while(sharedCurrent < size) {
+                while(sharedCurrent < times) {
 
                     if(sharedCurrent > 1)
                     {
                         for(int i = 0; i < sharedCurrent-1; i++)
                         {
-                            for(int j = 0; j < 1024*1024; j++)
+                            for(int j = 0; j < nBytes; j++)
                             {
                                 bytesArray[i][j]++;
                             }
@@ -69,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                while(sharedCurrent < size) {
+                while(sharedCurrent < times) {
 
                     if(sharedCurrent > 1)
                     {
                         for(int i = sharedCurrent-2; i >= 0; i--)
                         {
-                            for(int j = 0; j < 1024*1024; j++)
+                            for(int j = 0; j < nBytes; j++)
                             {
                                 bytesArray[i][j]++;
                             }
@@ -91,24 +88,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                bytesArray = new byte[size][];
+                bytesArray = new byte[times][];
 
 
-                while(sharedCurrent < size) {
+                while(sharedCurrent < times) {
                     try {
                         Thread.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    bytesArray[sharedCurrent] = new byte[1024*1024];
+                    bytesArray[sharedCurrent] = new byte[nBytes];
+                    Log.i("GCTest", "Allocted " + nBytes + " bytes");
                     sharedCurrent++;
-                }
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
 
             }
@@ -155,6 +147,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    public void getInfoFromText(){
+
+        EditText txtBytes = findViewById(R.id.txtBytes);
+        nBytes = Integer.parseInt(txtBytes.getText().toString());
+
+        EditText txtTimes = findViewById(R.id.txtTimes);
+        times = Integer.parseInt(txtTimes.getText().toString());
 
 
     }
