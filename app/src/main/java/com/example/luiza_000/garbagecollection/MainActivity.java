@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+
+                getInfoFromText();
                 threadForget.start();
             }
         });
@@ -121,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+
+                getInfoFromText();
                 threadStore.start();
             }
         });
@@ -131,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                getInfoFromText();
                 threadAccess[0].start();
                 threadAccess[1].start();
                 threadStore.start();
