@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidGargabeCollectionExperiment.iml" filepath="$PROJECT_DIR$/AndroidGargabeCollectionExperiment.iml" />
       <module fileurl="file://C:\Users\luiza_000\Desktop\Trabalhos\2017-2\GarbageCollection\AndroidGargabeCollectionExperiment.iml" filepath="C:\Users\luiza_000\Desktop\Trabalhos\2017-2\GarbageCollection\AndroidGargabeCollectionExperiment.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GarbageCollection.iml" filepath="$PROJECT_DIR$/GarbageCollection.iml" />
       <module fileurl="file://C:\Users\1570 LITE\Desktop\AndroidGargabeCollectionExperiment\GarbageCollection.iml" filepath="C:\Users\1570 LITE\Desktop\AndroidGargabeCollectionExperiment\GarbageCollection.iml" />
+      <module fileurl="file://C:\Users\Luiz Augusto\Desktop\Projetos\AndroidGargabeCollectionExperiment\GarbageCollection.iml" filepath="C:\Users\Luiz Augusto\Desktop\Projetos\AndroidGargabeCollectionExperiment\GarbageCollection.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://C:\Users\1570 LITE\Desktop\AndroidGargabeCollectionExperiment\app\app.iml" filepath="C:\Users\1570 LITE\Desktop\AndroidGargabeCollectionExperiment\app\app.iml" />
+      <module fileurl="file://C:\Users\Luiz Augusto\Desktop\Projetos\AndroidGargabeCollectionExperiment\app\app.iml" filepath="C:\Users\Luiz Augusto\Desktop\Projetos\AndroidGargabeCollectionExperiment\app\app.iml" />
     </modules>
   </component>
 </project>

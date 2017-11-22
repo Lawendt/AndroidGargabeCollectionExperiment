@@ -7,11 +7,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
 
-    private byte[] bytes;
-    private byte[][] bytesArray;
-    private int times = 100;
+
+public class MainActivity extends AppCompatActivity {
+    public class ByteClass {
+        public ByteClass() {
+            aByte = 1;
+        }
+        public byte aByte;
+    }
+
+    private ByteClass bytes;
+    private ByteClass[][] referenceByte;
+    private int times = 10;
     private int nBytes = 1048576;
     private int sharedCurrent = 0;
     @Override
@@ -24,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 int current = 0;
-
                 while(current < times) {
                     try {
                         Thread.sleep(30);
@@ -32,64 +39,23 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    bytes = new byte[nBytes];
-                    bytes = null;
+                    for(int i = 0; i < nBytes; i++){
+                        bytes = new ByteClass();
+                    }
                     current++;
-                    Log.i("GCTest", "Allocted " + nBytes + " bytes");
+                    Log.i("GCTest", current + " Allocted " + nBytes + " bytes");
                 }
-
             }
         });
 
-        final Thread[] threadAccess = new Thread[2];
-        threadAccess[0] = new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-                while(sharedCurrent < times) {
-
-                    if(sharedCurrent > 1)
-                    {
-                        for(int i = 0; i < sharedCurrent-1; i++)
-                        {
-                            for(int j = 0; j < nBytes; j++)
-                            {
-                                bytesArray[i][j]++;
-                            }
-                        }
-                    }
-                }
-
-            }
-        });
-        threadAccess[1] = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                while(sharedCurrent < times) {
-
-                    if(sharedCurrent > 1)
-                    {
-                        for(int i = sharedCurrent-2; i >= 0; i--)
-                        {
-                            for(int j = 0; j < nBytes; j++)
-                            {
-                                bytesArray[i][j]++;
-                            }
-                        }
-                    }
-                }
-
-            }
-        });
 
 
         final Thread threadStore = new Thread(new Runnable() {
             @Override
             public void run() {
 
-                bytesArray = new byte[times][];
-
+                referenceByte = new ByteClass[times][];
 
                 while(sharedCurrent < times) {
                     try {
@@ -98,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    bytesArray[sharedCurrent] = new byte[nBytes];
-                    Log.i("GCTest", "Allocted " + nBytes + " bytes");
+                    referenceByte[sharedCurrent] = new ByteClass[nBytes];
+                    for(int i = 0; i < nBytes; i++){
+                        referenceByte[sharedCurrent][i] = new ByteClass();
+                    }
+
+                    Log.i("GCTest", sharedCurrent + " Allocted " + nBytes + " bytes");
                     sharedCurrent++;
                 }
 
@@ -129,18 +99,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        Button bAccess = findViewById(R.id.btn_access);
-        bAccess.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                getInfoFromText();
-                threadAccess[0].start();
-                threadAccess[1].start();
-                threadStore.start();
-            }
-        });
 
 
         Button bKill = findViewById(R.id.btn_kill);
